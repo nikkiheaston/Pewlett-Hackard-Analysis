@@ -86,3 +86,97 @@ LEFT JOIN dept_employees as de
 ON ce.emp_no = de.emp_no
 GROUP BY de.dept_no
 ORDER BY de.dept_no;
+
+SELECT * FROM salaries
+ORDER BY to_date DESC;
+
+DROP TABLE emp_info
+SELECT e.emp_no,
+	e.first_name,
+e.last_name,
+	e.gender,
+	s.salary,
+	de.to_date
+INTO emp_info
+FROM employees as e
+INNER JOIN salaries as s
+ON (e.emp_no = s.emp_no)
+INNER JOIN dept_employees as de
+ON (e.emp_no = de.emp_no)
+WHERE (e.birth_date BETWEEN '1952-01-01' AND '1955-12-31')
+	AND (e.hire_date BETWEEN '1985-01-01' AND '1988-12-31')
+	AND (de.to_date = '9999-01-01');
+
+-- List of managers per department
+SELECT dm.dept_no,
+		d.dept_name,
+		dm.emp_no,
+		ce.last_name,
+		ce.first_name,
+		dm.from_date,
+		dm.to_date
+--INTO manager_info
+FROM dept_manager as dm
+	INNER JOIN departments as d
+		ON (dm.dept_no = d.dept_no)
+	INNER JOIN current_emp as ce
+		on (dm.emp_no = ce.emp_no);
+
+SELECT ce.emp_no,
+ce.first_name,
+ce.last_name,
+d.dept_name
+INTO dept_info
+FROM current_emp as ce
+INNER JOIN dept_employees as de
+ON (ce.emp_no = de.emp_no)
+INNER JOIN departments as d
+ON (de.dept_no = d.dept_no);
+
+SELECT * FROM dept_info;
+SELECT emp_no, first_name, last_name, dept_name
+INTO sales_development
+FROM dept_info
+WHERE (dept_name = 'Sales') OR (dept_name = 'Development');
+
+SELECT e.emp_no, 
+		e.first_name, 
+		e.last_name,
+		ti.title,
+		ti.from_date,
+		ti.to_date
+INTO retirement_titles
+FROM employees as e
+INNER JOIN titles as ti
+ON (e.emp_no = ti.emp_no)
+WHERE (e.birth_date BETWEEN '1952-01-01' AND '1955-12-31')
+ORDER BY emp_no;
+
+SELECT DISTINCT ON (emp_no) emp_no, first_name, last_name, title
+INTO unique_titles
+FROM retirement_titles
+WHERE (to_date = '9999-01-01')
+ORDER BY emp_no, to_date DESC;
+
+SELECT COUNT (title), title
+INTO retiring_titles
+FROM unique_titles
+GROUP BY title
+ORDER BY COUNT(title) DESC;
+
+SELECT 	DISTINCT ON (e.emp_no) e.emp_no, 
+		e.first_name, 
+		e.last_name, 
+		e.birth_date,
+		de.from_date,
+		de.to_date,
+		t.title
+INTO mentorship_eligibility
+FROM employees as e
+JOIN dept_employees as de
+ON (e.emp_no = de.emp_no)
+JOIN titles as t
+ON (e.emp_no = t.emp_no)
+WHERE (de.to_date = '9999-01-01')
+	AND (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
+ORDER BY emp_no
