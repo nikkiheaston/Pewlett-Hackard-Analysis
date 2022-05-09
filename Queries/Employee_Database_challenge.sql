@@ -1,3 +1,4 @@
+--Deliverable 1
 SELECT 	e.emp_no, 
 		e.first_name, 
 		e.last_name,
@@ -23,6 +24,8 @@ FROM unique_titles
 GROUP BY title
 ORDER BY COUNT(title) DESC;
 
+--Deliverable 2
+
 SELECT 	DISTINCT ON (e.emp_no) e.emp_no, 
 		e.first_name, 
 		e.last_name, 
@@ -41,10 +44,22 @@ WHERE (de.to_date = '9999-01-01')
 ORDER BY emp_no
 
 
---Additional queries Deliverable 3
+--Deliverable 3 (2 Additional Queries)
 
+--Total current employees, then broken up by title (including those retiring soon)
 
---Get count of all retiring employees by birth year to staggar hiring each year
+SELECT COUNT(emp_no)
+FROM titles
+WHERE to_date = '9999-01-01';
+--240124
+
+SELECT COUNT (emp_no) total, title
+INTO all_current_titles
+FROM titles
+WHERE to_date = '9999-01-01'
+GROUP BY title; 
+
+--Get the count of all retiring employees by birth year to staggar hiring each year
 SELECT 	e.emp_no, 
 		e.first_name, 
 		e.last_name,
@@ -113,8 +128,3 @@ FROM born_1955
 GROUP BY title
 ORDER BY title;
 
---Total employees currently by title (including those retiring soon)
-SELECT COUNT (emp_no) emp_no, title
-FROM titles
-WHERE to_date = '9999-01-01'
-GROUP BY title; 
