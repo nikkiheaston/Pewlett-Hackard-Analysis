@@ -39,3 +39,82 @@ JOIN titles as t
 WHERE (de.to_date = '9999-01-01')
 	AND (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
 ORDER BY emp_no
+
+
+--Additional queries Deliverable 3
+
+
+--Get count of all retiring employees by birth year to staggar hiring each year
+SELECT 	e.emp_no, 
+		e.first_name, 
+		e.last_name,
+		t.title
+INTO born_1952
+FROM employees as e
+INNER JOIN titles as t
+ON (e.emp_no = t.emp_no)
+WHERE (e.birth_date BETWEEN '1952-01-01' AND '1952-12-31')
+AND (t.to_date = '9999-01-01')
+ORDER BY emp_no;
+
+SELECT COUNT (title), title
+FROM born_1952
+GROUP BY title
+ORDER BY title;
+
+SELECT 	e.emp_no, 
+		e.first_name, 
+		e.last_name,
+		t.title
+INTO born_1953
+FROM employees as e
+INNER JOIN titles as t
+ON (e.emp_no = t.emp_no)
+WHERE (e.birth_date BETWEEN '1953-01-01' AND '1953-12-31')
+AND (t.to_date = '9999-01-01')
+ORDER BY emp_no;
+
+SELECT COUNT (title), title
+FROM born_1953
+GROUP BY title
+ORDER BY title;
+
+SELECT 	e.emp_no, 
+		e.first_name, 
+		e.last_name,
+		t.title
+INTO born_1954
+FROM employees as e
+INNER JOIN titles as t
+ON (e.emp_no = t.emp_no)
+WHERE (e.birth_date BETWEEN '1954-01-01' AND '1954-12-31')
+AND (t.to_date = '9999-01-01')
+ORDER BY emp_no;
+
+SELECT COUNT (title), title
+FROM born_1954
+GROUP BY title
+ORDER BY title;
+
+SELECT 	e.emp_no, 
+		e.first_name, 
+		e.last_name,
+		t.title
+INTO born_1955
+FROM employees as e
+INNER JOIN titles as t
+ON (e.emp_no = t.emp_no)
+WHERE (e.birth_date BETWEEN '1955-01-01' AND '1955-12-31')
+AND (t.to_date = '9999-01-01')
+ORDER BY emp_no;
+
+SELECT COUNT (title), title
+FROM born_1955
+GROUP BY title
+ORDER BY title;
+
+--Total employees currently by title (including those retiring soon)
+SELECT COUNT (emp_no) emp_no, title
+FROM titles
+WHERE to_date = '9999-01-01'
+GROUP BY title; 
